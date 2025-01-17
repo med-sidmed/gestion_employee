@@ -1,0 +1,9 @@
+<h1>Employee Details</h1>
+<p><strong>Name:</strong> {{ employee.first_name }} {{ employee.last_name }}</p>
+<p><strong>Position:</strong> {{ employee.position }}</p>
+<p><strong>Salary:</strong> {{ employee.salary }}</p>
+<p><strong>Hire Date:</strong> {{ employee.hire_date }}</p>
+<p><strong>Contact:</strong> {{ employee.contact }}</p>
+<a href="{% url 'edit_employee' employee.id %}">Edit Employee</a>
+<a href="{% url 'delete_employee' employee.id %}">Delete Employee</a>
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>

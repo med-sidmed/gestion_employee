@@ -1,0 +1,15 @@
+<h1>Search Employees</h1>
+<form method="get">
+    <input type="text" name="query" value="{{ query }}" placeholder="Search by name or position">
+    <button type="submit">Search</button>
+</form>
+{% if employees %}
+    <ul>
+    {% for employee in employees %}
+        <li>{{ employee.first_name }} {{ employee.last_name }} - {{ employee.position }}</li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No employees found.</p>
+{% endif %}
+<a href="{% url 'dashboard' %}">Back to Dashboard</a>
