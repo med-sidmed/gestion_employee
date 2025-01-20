@@ -10,8 +10,10 @@ urlpatterns = [
     path('statistics/', views.statistics, name='statistics'),  # Page des statistiques
     path('settings/', views.settings, name='settings'),  # Page des paramètres
     path('profile/', views.profile, name='profile'),  # Page de profil
-    # path('departments/', views.departments, name='departments'),  # Page des départements
-    # path('leaves/', views.leaves, name='leaves'),  # Page des congés
+
+    path('login/', views.login, name='login'),  # Page des départements
+    path('register/', views.register, name='register'),  # Page des départements
+    path('logout/', views.logout, name='logout'),  # Page des congés
 
     # URLs pour les départements
     path('departments/', views.department_list, name='department_list'),

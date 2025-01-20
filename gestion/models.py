@@ -1,5 +1,16 @@
 from django.db import models
 
+
+class Utilisateur(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.TextField(blank=True, null=True)
+    mdp = models.TextField(blank=True, null=False)
+    
+    def __str__(self):
+        return self.name
+
+
+
 class Department(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
