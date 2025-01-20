@@ -1,0 +1,114 @@
+    <!-- Add Employee Modal -->
+     <style>
+        
+    .modal-header {
+        background-color: #5cb85c;
+        color: white;
+        border-bottom: 1px solid #e5e5e5;
+        padding: 10px;
+        margin-right: 200px;
+        margin-top: 100px;
+    }
+#addEmployeeModal{
+    margin-left: 200px;
+    margin-right: 100px;
+}
+    .modal-title {
+        margin: 0;
+        line-height: 1.42857143;
+    }
+
+    .modal-body {
+        padding: 10px;
+    }
+
+    .form-group {
+        margin-bottom: 10px;
+    }
+
+    .form-group label {
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .form-control {
+        width: 70%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        margin-right: 200px;
+        text-align: right;
+        border-top: 1px solid #e5e5e5;
+    }
+
+    .btn {
+        padding: 10px 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-default {
+        background-color: #f4f4f4;
+        color: #333;
+    }
+
+    .btn-success {
+        background-color: #5cb85c;
+        color: white;
+    }
+
+    .btn:hover {
+        opacity: 0.8;
+    }
+     </style>
+
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}    
+                    <div class="modal-header">
+                        <h4 class="modal-title">Login</h4>
+                    </div>
+                    
+                {% if messages %}
+                <div >
+            {% for m in messages %}
+            <h4 class="modal-title modal-header" style="background-color: red;margin-right: 200px;">{{ m }}</h4>
+            {% endfor %}
+        </div>
+
+            {% endif %}
+         
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mot de passe</label>
+                            <input type="password" name="password" class="form-control" required> <!-- Correction ici -->
+                        </div>
+                      
+                    </div>
+
+                    <div class="modal-footer">
+                       <div class="btn">Vous n`avez pas un compte ?<a href="{%url 'register'%}"> creer un!</a></div> 
+                        <div>
+                            <input type="reset" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                            <input type="submit" class="btn btn-success" value="Se connecter">
+                        </div>
+                    </div>
+                </form>
+                
+            </div>
+        </div>
+    </div>
