@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>{% if leave_request %}Modifier{% else %}Ajouter{% endif %} un Congé</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="employee">Employé</label>
+            <select class="form-control" id="employee" name="employee" required>
+                {% for employee in employees %}
+                    <option value="{{ employee.pk }}" {% if leave_request and leave_request.employee.pk == employee.pk %}selected{% endif %}>
+                        {{ employee.first_name }} {{ employee.last_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="start_date">Date de Début</label>
+            <input type="date" class="form-control" id="start_date" name="start_date" value="{{ leave_request.start_date|default_if_none:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="end_date">Date de Fin</label>
+            <input type="date" class="form-control" id="end_date" name="end_date" value="{{ leave_request.end_date|default_if_none:'' }}" required>
+        </div>
+        <div class="form-group">
+            <label for="status">Statut</label>
+            <select class="form-control" id="status" name="status" required>
+                <option value="pending" {% if leave_request and leave_request.status == 'pending' %}selected{% endif %}>En attente</option>
+                <option value="approved" {% if leave_request and leave_request.status == 'approved' %}selected{% endif %}>Approuvé</option>
+                <option value="rejected" {% if leave_request and leave_request.status == 'rejected' %}selected{% endif %}>Rejeté</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="reason">Raison</label>
+            <textarea class="form-control" id="reason" name="reason" rows="3">{{ leave_request.reason|default_if_none:'' }}</textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+        <a href="{% url 'leave_list' %}" class="btn btn-secondary">Annuler</a>
+    </form>
+</div>
+{% endblock %}

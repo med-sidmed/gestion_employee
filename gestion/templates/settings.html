@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h2>Paramètres</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="theme">Thème</label>
+            <select class="form-control" id="theme" name="theme">
+                <option value="light" {% if theme == 'light' %}selected{% endif %}>Clair</option>
+                <option value="dark" {% if theme == 'dark' %}selected{% endif %}>Sombre</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </form>
+</div>
+
+
+
+<div class="container">
+    <h2>Paramètres</h2>
+
+    <!-- Préférences de notification -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Notifications</h5>
+            <form method="post">
+                {% csrf_token %}
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="email_notifications" name="email_notifications" {% if email_notifications %}checked{% endif %}>
+                    <label class="form-check-label" for="email_notifications">Notifications par E-mail</label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" id="sms_notifications" name="sms_notifications" {% if sms_notifications %}checked{% endif %}>
+                    <label class="form-check-label" for="sms_notifications">Notifications par SMS</label>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Enregistrer</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

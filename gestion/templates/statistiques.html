@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Gestion des Employés</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom CSS --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="wrapper">
+        <!-- Sidebar -->
+        <nav id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <h3>Gestion des Employés</h3>
+            </div>
+
+            <ul class="list-unstyled components">
+                <li>
+                    <a href="index.html"><i class="fa fa-home"></i> Accueil</a>
+                </li>
+                <li>
+                    <a href="liste_employes.html"><i class="fa fa-users"></i> Liste des Employés</a>
+                </li>
+                <li>
+                    <a href="ajouter_employe.html"><i class="fa fa-user-plus"></i> Ajouter un Employé</a>
+                </li>
+                <li class="active">
+                    <a href="statistiques.html"><i class="fa fa-bar-chart"></i> Statistiques</a>
+                </li>
+                <li>
+                    <a href="parametres.html"><i class="fa fa-cog"></i> Paramètres</a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Page Content -->
+        <div id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="glyphicon glyphicon-align-left"></i>
+                            <span>Toggle Sidebar</span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+
+            <div class="container-fluid">
+                <h2>Statistiques des Employés</h2>
+                <div class="row">
+                    <!-- Graphique 1 : Répartition par département -->
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Répartition des Employés par Département</h3>
+                            </div>
+                            <div class="panel-body">
+                                <canvas id="departmentChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Graphique 2 : Répartition par âge -->
+                    <div class="col-md-6">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Répartition des Employés par Âge</h3>
+                            </div>
+                            <div class="panel-body">
+                                <canvas id="ageChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <!-- Custom JS -->
+    <script src="scripts.js"></script>
+    <!-- Chart.js Script -->
+    <script>
+        // Données pour le graphique des départements
+        const departmentData = {
+            labels: ['IT', 'RH', 'Ventes', 'Marketing', 'Support'],
+            datasets: [{
+                label: 'Nombre d\'employés',
+                data: [12, 8, 15, 10, 7],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.6)',
+                    'rgba(54, 162, 235, 0.6)',
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(153, 102, 255, 0.6)',
+                    'rgba(255, 159, 64, 0.6)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        // Données pour le graphique des âges
+        const ageData = {
+            labels: ['18-25', '26-35', '36-45', '46-55', '56+'],
+            datasets: [{
+                label: 'Nombre d\'employés',
+                data: [5, 20, 15, 10, 5],
+                backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        };
+
+        // Configuration des graphiques
+        const departmentConfig = {
+            type: 'bar',
+            data: departmentData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        const ageConfig = {
+            type: 'bar',
+            data: ageData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        };
+
+        // Rendu des graphiques
+        const departmentChart = new Chart(
+            document.getElementById('departmentChart'),
+            departmentConfig
+        );
+
+        const ageChart = new Chart(
+            document.getElementById('ageChart'),
+            ageConfig
+        );
+    </script>
+</body>
+</html>

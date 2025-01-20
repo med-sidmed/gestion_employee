@@ -1,0 +1,148 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <h2>Statistiques</h2>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Graphique en barres : Nombre d'employés par département -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Employés par Département</h5>
+                <canvas id="departmentChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Graphique en camembert : Répartition des congés -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Répartition des Congés</h5>
+                <canvas id="leaveChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <!-- Graphique en ligne : Évolution des embauches -->
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Évolution des Embauches</h5>
+                <canvas id="hireChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Données pour les graphiques (remplacez par vos données réelles)
+        const departmentData = {
+            labels: ['RH', 'IT', 'Ventes', 'Marketing', 'Support'],
+            datasets: [{
+                label: 'Nombre d\'employés',
+                data: [12, 19, 3, 5, 2],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const leaveData = {
+            labels: ['En attente', 'Approuvé', 'Rejeté'],
+            datasets: [{
+                label: 'Répartition des Congés',
+                data: [5, 10, 3],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(75, 192, 192, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(75, 192, 192, 1)'
+                ],
+                borderWidth: 1
+            }]
+        };
+
+        const hireData = {
+            labels: ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin', 'Juil'],
+            datasets: [{
+                label: 'Nombre d\'embauches',
+                data: [3, 5, 2, 6, 4, 7, 8],
+                borderColor: 'rgba(75, 192, 192, 1)',
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderWidth: 1,
+                fill: true
+            }]
+        };
+
+        // Graphique en barres
+        const departmentChart = new Chart(document.getElementById('departmentChart'), {
+            type: 'bar',
+            data: departmentData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        // Graphique en camembert
+        const leaveChart = new Chart(document.getElementById('leaveChart'), {
+            type: 'pie',
+            data: leaveData,
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    title: {
+                        display: true,
+                        text: 'Répartition des Congés'
+                    }
+                }
+            }
+        });
+
+        // Graphique en ligne
+        const hireChart = new Chart(document.getElementById('hireChart'), {
+            type: 'line',
+            data: hireData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    });
+</script>
+<!-- Inclure Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}

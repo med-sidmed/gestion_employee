@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+{%load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+<link rel="stylesheet" href="{% static 'style.css' %}">
+<div class="container">
+    <h2>Liste des Congés</h2>
+    <a href="{% url 'leave_add' %}" class="btn btn-success mb-3">Ajouter un Congé</a>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Employé</th>
+                <th>Date de Début</th>
+                <th>Date de Fin</th>
+                <th>Statut</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for leave in leave_requests %}
+                <tr>
+                    <td>{{ leave.employee.first_name }} {{ leave.employee.last_name }}</td>
+                    <td>{{ leave.start_date }}</td>
+                    <td>{{ leave.end_date }}</td>
+                    <td>{{ leave.get_status_display }}</td>
+                    <td style="display: flex;">
+                        <a href="{% url 'leave_edit' leave.pk %}" class="btn" ><i  class="material-icons"  title="Edit"  style="color: #FFC107;">&#xE254;</i></a>
+                        <a href="{% url 'leave_delete' leave.pk %}" class="btn"><i class="material-icons"  title="Delete"  style="color: #F44336;">&#xE872;</i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

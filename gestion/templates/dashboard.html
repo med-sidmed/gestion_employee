@@ -1,0 +1,345 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{%load static %}
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"><!-- Font Awesome -->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	<!-- Google Material Icons -->
+	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <title>Dashboard Gestion des Employés</title>
+ 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    {%load static %}
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <div id="content">
+
+
+        <!-- <nav class="navbar navbar-default">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                        <i class="glyphicon glyphicon-align-left"></i>
+                        <span>Toggle Sidebar</span>
+                    </button>
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </nav> -->
+
+        <div class="container-fluid">
+            <div class="table-title">
+                <div class="row">
+                    <div class="col-xs-6">
+                        <h2>Gestion des <b>Employés</b></h2>
+                    </div>
+                    <div class="col-xs-6">
+                        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Ajouter un Employee</span></a>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped table-hover" id="employeeTable">
+                <thead>
+                    <tr>
+                        <th>Nom</th>
+                        <th>Email</th>
+                        <th>Poste</th>
+                        <th>Date d'embauche</th>
+                        <th>Salaire</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                        <tr class="employee-row">
+                            <td>{{ employee.first_name }} {{ employee.last_name }}</td>
+                            <td>{{ employee.email }}</td>
+                            <td>{{ employee.position }}</td>
+                            <td>{{ employee.hire_date }}</td>
+                            <td>{{ employee.salary }}</td>
+                            <td>
+                                <a href="#editEmployeeModal{{ employee.id }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                                <a href="#deleteEmployeeModal{{ employee.id }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Pagination -->
+            <div class="pagination-container">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination" id="pagination">
+                        <!-- Les boutons de pagination seront générés ici par JavaScript -->
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Add Employee Modal -->
+    <div id="addEmployeeModal" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post" action="{% url 'add_employee' %}">
+                    {% csrf_token %}
+                    <div class="modal-header">
+                        <h4 class="modal-title">Ajouter Employee</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label>Nom</label>
+                            <input type="text" name="first_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Prénom</label>
+                            <input type="text" name="last_name" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Poste</label>
+                            <select name="position" class="form-control" required>
+                                <option value="Manager">Manager</option>
+                                <option value="Developer">Developer</option>
+                                <option value="Designer">Designer</option>
+                                <option value="HR">HR</option>
+                                <option value="Sales">Sales</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Date d'embauche</label>
+                            <input type="date" name="hire_date" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Salaire</label>
+                            <input type="number" step="0.01" name="salary" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contact</label>
+                            <input type="text" name="contact" class="form-control">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                        <input type="submit" class="btn btn-success" value="Ajouter">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Employee Modal -->
+    {% for employee in employees %}
+        <div id="editEmployeeModal{{ employee.id }}" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'edit_employee' employee.id %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title">Modifier Employee</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Nom</label>
+                                <input type="text" name="first_name" class="form-control" value="{{ employee.first_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Prénom</label>
+                                <input type="text" name="last_name" class="form-control" value="{{ employee.last_name }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" name="email" class="form-control" value="{{ employee.email }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Poste</label>
+                                <select name="position" class="form-control" required>
+                                    <option value="Manager" {% if employee.position == "Manager" %}selected{% endif %}>Manager</option>
+                                    <option value="Developer" {% if employee.position == "Developer" %}selected{% endif %}>Developer</option>
+                                    <option value="Designer" {% if employee.position == "Designer" %}selected{% endif %}>Designer</option>
+                                    <option value="HR" {% if employee.position == "HR" %}selected{% endif %}>HR</option>
+                                    <option value="Sales" {% if employee.position == "Sales" %}selected{% endif %}>Sales</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Date d'embauche</label>
+                                <input type="date" name="hire_date" class="form-control" value="{{ employee.hire_date|date:'Y-m-d' }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Salaire</label>
+                                <input type="number" step="0.01" name="salary" class="form-control" value="{{ employee.salary }}" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Contact</label>
+                                <input type="text" name="contact" class="form-control" value="{{ employee.contact }}">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                            <input type="submit" class="btn btn-info" value="Enregistrer">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <!-- Delete Employee Modal -->
+    {% for employee in employees %}
+        <div id="deleteEmployeeModal{{ employee.id }}" class="modal fade">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form method="post" action="{% url 'delete_employee' employee.id %}">
+                        {% csrf_token %}
+                        <div class="modal-header">
+                            <h4 class="modal-title">Supprimer Employee</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Êtes-vous sûr de vouloir supprimer cet employé ?</p>
+                            <p class="text-warning"><small>Cette action ne peut pas être annulée.</small></p>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Annuler">
+                            <input type="submit" class="btn btn-danger" value="Supprimer">
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+    <script>
+        // Pagination avec JavaScript
+        document.addEventListener('DOMContentLoaded', function () {
+            const rowsPerPage = 5; // Nombre de lignes par page
+            const rows = document.querySelectorAll('.employee-row');
+            const pagination = document.getElementById('pagination');
+            let currentPage = 1;
+
+            // Fonction pour afficher les lignes de la page spécifiée
+            function showPage(page) {
+                const start = (page - 1) * rowsPerPage;
+                const end = start + rowsPerPage;
+
+                rows.forEach((row, index) => {
+                    if (index >= start && index < end) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+
+            // Fonction pour générer les boutons de pagination
+            function setupPagination() {
+                const pageCount = Math.ceil(rows.length / rowsPerPage);
+                pagination.innerHTML = '';
+
+                for (let i = 1; i <= pageCount; i++) {
+                    const li = document.createElement('li');
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.textContent = i;
+                    a.classList.add('page-link');
+
+                    if (i === currentPage) {
+                        li.classList.add('active');
+                    }
+
+                    a.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        currentPage = i;
+                        showPage(currentPage);
+
+                        // Mettre à jour la classe active
+                        document.querySelectorAll('.pagination li').forEach(li => li.classList.remove('active'));
+                        this.parentElement.classList.add('active');
+                    });
+
+                    li.appendChild(a);
+                    pagination.appendChild(li);
+                }
+            }
+
+            // Initialisation
+            showPage(currentPage);
+            setupPagination();
+        });
+    </script>
+</body>
+</html>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Custom JS -->
+
+    <!-- jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</body>
+</html>
+
+<style>/* Pagination Styles */
+	.pagination-container {
+		margin-top: 20px;
+		text-align: center;
+	}
+	
+	.pagination {
+		display: inline-flex;
+		padding-left: 0;
+		list-style: none;
+		border-radius: 0.25rem;
+		position: fixed;
+	}
+	
+	.pagination li {
+		margin: 0 2px;
+	}
+	
+	.pagination li a {
+		color: #007bff;
+		text-decoration: none;
+		padding: 5px 10px;
+		border: 1px solid #ddd;
+		border-radius: 3px;
+	}
+	
+	.pagination li.active a {
+		background-color: #007bff;
+		color: white;
+		border-color: #007bff;
+	}
+	
+	.pagination li a:hover {
+		background-color: #f8f9fa;
+	}
+	
+
+		</style>
+
+<!-- Inclure Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{%endblock%}
