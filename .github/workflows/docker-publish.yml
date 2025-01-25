@@ -1,6 +1,5 @@
 name: mini_projet_docker_devops_ci_cd
 
- 
 on:
   push:
     branches:
@@ -19,8 +18,8 @@ jobs:
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}  # Utilise le secret DOCKER_USERNAME
+          password: ${{ secrets.DOCKER_PASSWORD }}  # Utilise le secret DOCKER_PASSWORD
 
       # Étape 3 : Construire et pousser l'image Docker
       - name: Build and push Docker image
@@ -28,4 +27,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: med2380/mini_devops:latest
+          tags: med2380/mini_devops:latest  # Remplacez "med2380" par votre nom d'utilisateur Docker Hub
