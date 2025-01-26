@@ -17,14 +17,8 @@ jobs:
       - name: Build Docker image
         run: |
           docker build -t med2380/mini_devops:latest .
-
       # Étape 3 : Pousser l'image sur Docker Hub
       - name: Push Docker image to Docker Hub
         run: |
           docker login -u med2380 -p ${{ secrets.DOCKER_HUB_TOCKEN }}
           docker push med2380/mini_devops:latest
-      - name: Checkout code
-        uses: actions/checkout@v4
-        with:
-          submodules: false
-```
